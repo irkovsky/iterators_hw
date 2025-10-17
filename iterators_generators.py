@@ -37,3 +37,34 @@ def flat_generator2(list_of_lists):
         else:
             yield element
             
+
+class FlatIterator2():
+    def __init__(self, main_list):
+        self.main_list = main_list
+        self.coords = [0]
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        while True:
+            current_element = self.main_list
+            
+            try:
+                for num in self.coords:
+                    current_element = current_element[num]
+            except IndexError:
+                self.coords.pop()
+                if not self.coords:
+                    raise StopIteration
+                self.coords[-1] += 1
+                continue
+           
+            if isinstance(current_element, list):
+                self.coords.append(0)
+                continue
+            else:
+                self.coords[-1] += 1
+                return current_element
+            
+        
